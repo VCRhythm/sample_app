@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, only: [:edit, :update, :index, :destroy, :following, :follwers]
+  before_filter :signed_in_user, only: [:edit, :update, :index, :destroy, :following, :followers, :transactions]
   before_filter :correct_user, only: [:edit, :update]
   before_filter :admin_user, only: :destroy
   
@@ -59,7 +59,9 @@ class UsersController < ApplicationController
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
-    
+  
+  
+
   private
         
     def correct_user

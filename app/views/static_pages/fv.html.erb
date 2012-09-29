@@ -1,0 +1,25 @@
+<h1>Future Value</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= label_tag 'pv_value', 'PV: $'%>
+    <%= number_field_tag 'pv_value', 0, :min => 0, :size=>30 %><br />
+    <%= label_tag 'r_value', 'R: '%>
+    <%= number_field_tag 'r_value', 0, :min => 0 %>%<br />
+    <%= label_tag 't_value', 'Years: '%>
+    <%= number_field_tag 't_value', 0, :min => 0 %><br />
+    <%= submit_tag "Calculate FV", :id=> "pv_calculate", :class=> "btn btn-large btn-primary" %>
+  </div>
+</div>
+<div id="fv_value">
+</div>
+
+<script type='text/javascript'>
+$('#pv_calculate').click(function(){
+  var pv=$('#pv_value').val(),  
+    r=$('#r_value').val()/100,
+    t=$('#t_value').val(),
+    fv=pv*Math.pow(r+1,t);
+    fv=(Math.round(fv*100)/100).toFixed(2);
+  $('#fv_value').html('$'+fv);
+});
+</script>

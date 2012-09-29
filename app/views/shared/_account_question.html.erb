@@ -1,0 +1,8 @@
+<li id="<%= account_question.id %>">
+  <h3>Update balance in <%= account_question.name %></h3>
+  <span class="question_content">
+  <div class="input-prepend input-append">
+    <span class="add-on">$</span><%= text_field :balance, :class=> 'input-medium', :placeholder=>account_question.balance %><span class="add-on">.00</span>
+  </div>
+  </span>
+</li>

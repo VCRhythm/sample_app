@@ -1,0 +1,5 @@
+<% debt_percent=(Float(@check_acct.balance-@spending_sum)/@check_acct.balance)*100 %>
+<h3><%= "Available Income (Updated "+@check_acct.created_at.strftime('%b. %e, %Y')+")" %>: <%= number_to_currency(@check_acct.balance-@spending_sum, options={:precision=>0}) %></h3>
+<div class="progress progress-info">
+  <div class="bar" style="width: <%= debt_percent %>%"></div>
+</div>

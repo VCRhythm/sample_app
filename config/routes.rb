@@ -4,10 +4,16 @@ SampleApp::Application.routes.draw do
       get :following, :followers
     end
   end
+  resources :transactions
+  resources :accounts
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy]
+  resources :flows, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
+  
+  match '/empty_day', to: 'transactions#empty_day'
   root to: 'static_pages#home'  
+  match '/fv', to: 'static_pages#fv'
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete

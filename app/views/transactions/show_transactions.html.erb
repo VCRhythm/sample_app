@@ -1,0 +1,60 @@
+<% provide(:title, @user.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @user.name %>
+      </h1>
+    </section>
+    <section>
+      <%= render 'shared/stats' %>
+    </section>
+  </aside>
+  <div class="span8">
+    <% if @user.transactions.any? %>
+      <h3>Transactions (<span id='transaction_count'><%= @user.transactions.count %></span>)</h3>
+      <!--<div id="highChartContainer" style="min-width:400px; height:400px; margin: 0 auto"></div>//-->
+      <ol class="microposts">
+        <%= render @transactions %>
+      </ol>
+      <%= will_paginate @transactions %>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <%= render 'shared/transaction_form' %>
+  </div>
+</div>
+
+<!-- <script type='text/javascript'>
+  $(document).ready(function(){
+    drawChart();
+  });
+  
+function drawChart()
+{
+  chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'highChartContainer',
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Transactions'
+        },
+        series: [{
+            type: 'pie',
+            name: 'Category',
+            data:
+              <%=
+                  @transactions.select{|transaction| transaction.flow_id > 0}.map do |transaction|
+                    [transaction.flow.name, (transaction.value/@sum_transactions).round(4)]
+                  end.to_json.html_safe
+              %>
+        }]
+    });
+};
+</script> //-->

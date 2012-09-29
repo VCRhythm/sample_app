@@ -1,0 +1,7 @@
+$('.flow_field').toggle();
+$("label[for='transaction_Flow']").toggle();
+$("#transaction_flow_id").prepend("<option value= '<%=@flow.id%>'><%=@flow.name%></option>");
+$("#transaction_flow_id").val(<%=@flow.id%>);
+$("#transaction_flow_id").toggle();
+if($('#toggle_new_flow').text() == '+') $('#toggle_new_flow').text('-');
+else $('#toggle_new_flow').text('+');

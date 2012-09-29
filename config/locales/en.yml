@@ -3,3 +3,7 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been filled for this day"

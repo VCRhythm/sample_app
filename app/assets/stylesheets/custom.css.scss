@@ -18,6 +18,9 @@ body {
   padding-top: 60px;
 }
 
+.container {
+}
+
 section {
   overflow: auto;
 }
@@ -167,13 +170,9 @@ aside {
 }
 
 /* forms */
-input, textarea, select, .uneditable-input {
-  border: 1px solid #bbb;
-  width: 100%;
-  padding: 10px;
-  height: auto;
-  margin-bottom: 15px;
-  @include box_sizing;
+
+.note_area{
+  display:none;
 }
 
 #error_explanation {
@@ -183,6 +182,24 @@ input, textarea, select, .uneditable-input {
     margin: 0 0 18px 0;
   }
 }
+
+.flow_bar_title{
+  margin-right: 5px;
+}
+
+.form-inline{
+}
+
+.center_flow{
+  text-align:center;
+  position:fixed;
+  width:300px;
+  left:0px;
+  bottom:0px;
+  border: 1px solid blue;
+  margin: 0 auto;
+  @include box-sizing;
+  }
 
 .field_with_errors {
   @extend .control-group;
@@ -216,9 +233,67 @@ input, textarea, select, .uneditable-input {
 .content {
   display: block;
 }
+
+.question_header{
+  width:100%;
+  display:block;
+  input[type="submit"].btn-block {
+    width: 100%;
+  }
+}
+
+.question_content{
+  display: block;
+  
+  vertical-align:bottom;
+  .add-on{
+    font-size:40px;
+    }
+  h3{
+    font-size:40px;
+    float:left;
+    width:400px;
+    }
+  input[type="text"]{
+    font-size:40px;
+    height:auto;
+    text-align:right;
+    line-height:45px;
+  }
+  input[type="submit"]{
+    font-size:20px;
+  }
+  .add-on{
+    padding-top:17px;
+    height:33px;
+    background-color:$grayLighter;
+  }
+}
+
+.popover-title{
+  display:none;
+  }
+.popover-content{
+  
+  }
+.popover-inner{
+  font-size: 25px;
+  color: green;
+  width:180px;
+}
+  
+  
+.save-flow{
+  display:none;
+  }
+  
 .timestamp {
   color: $grayLight;
 }
+.highlight_date{
+  color:red;
+}
+
 .gravatar {
   float: left;
   margin-right: 10px;

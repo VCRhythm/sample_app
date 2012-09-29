@@ -1,0 +1,11 @@
+<div class="flow_field">
+<%= form_for Flow.new, :remote => 'true' do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+    <%= f.label :name, 'Name of New Flow' %>
+    <%= f.text_field :name %>
+    <%= f.label :description, 'Description of New Flow' %>
+    <%= f.text_field :description %>
+    <%= f.submit "Add New Flow", class: "btn btn-large btn-primary" %>
+<% end %>
+<%= render @flows %>
+</div>

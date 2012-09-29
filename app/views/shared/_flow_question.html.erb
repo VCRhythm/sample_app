@@ -1,0 +1,21 @@
+<li id="<%= flow_question.id %>">
+  <span class="question_content">
+    <h3><%= flow_question.name %></h3>
+    <% transaction=@transactions.where('flow_id=? AND transaction_date=?', flow_question.id, @day).first %>
+    <% if transaction %>
+       <% transaction_value=transaction.value.round %>
+       <% transaction_desc=transaction.description %>
+    <% else %>
+      <% transaction_value=0 %>
+    <% end %>
+    <span class="input-prepend input-append">
+      <span class="add-on">$</span><%= text_field_tag 'value', nil, :placeholder=>transaction_value, :class=> 'input-medium flow-input', :id=>'input_'+flow_question.id.to_s, :tabindex=>1 %><span class="add-on">.00</span>
+    </span>
+    <%= button_tag 'N', :id=>'note_button'+flow_question.id.to_s, :class=>'note_button btn btn-large btn-success', :tabindex=>2 %>
+    <% if transaction_desc %>
+      <%= text_area_tag nil, transaction_desc, :id=>'notes'+flow_question.id.to_s, :class=>'note_area', :style=>'display:inline' %>
+    <% else %>
+      <%= text_area_tag nil, transaction_desc, :id=>'notes'+flow_question.id.to_s, :class=>'note_area' %>
+    <% end %>
+  </span>
+</li>

@@ -1,34 +1,83 @@
 <% if signed_in? %>
   <div class="row">
-    <aside class="span4">
-      <section>
-        <%= render 'shared/user_info' %>
-      </section>
-      <section>
-        <%= render 'shared/stats' %>
-      </section>
-      <section>
-        <%= render 'shared/micropost_form' %>
-      </section>
-    </aside>
-    <div class="span8">
-      <h3>Micropost Feed</h3>
-      <%= render 'shared/feed' %>
+    <div class="span12">
+      <%= render 'shared/question_form_header' %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <%= render 'shared/question_form' %>
     </div>
   </div>  
 <% else %>
   <div class="center hero-unit">
-    <h1>Welcome to the Sample App</h1>
-
-    <h2>
-      This is the home page for the
-      <a href="http://railstutorial.org/">Ruby on Rails Tutorial</a>
-      sample application.
-    </h2>
-
+    <h1>Money Maker</h1>
+    <h2>Sign up to request an account.</h2>
     <%= link_to "Sign up now!", signup_path, 
-                                class: "btn btn-large btn-primary" %>
+        class: "btn btn-large btn-primary" %>
   </div>
-
-  <%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
 <% end %> 
+
+<script type="text/javascript">
+$('.flow-input').change(function () {
+  var id=this.id.substr(6),
+      value=$(this).val(),
+      date=$('#date_tag').attr('date');
+  var transaction={
+    flow_id: id,
+    value: value,
+    transaction_date: date
+    }
+  $.ajax({url: "transactions",
+          type: 'post',
+          dataType: 'json',
+          data: {transaction:transaction} 
+  }).success( function() {  
+    $('#input_'+id).popover({placement: 'left', content: "Saved Flow", trigger: "manual"});
+    $('#input_'+id).popover('show');
+  });
+});
+
+$('.flow-input').focus(function() {
+  $('.popover').hide('fast'); 
+});
+
+$('body').hover(function(){
+  $('.popover').hide('fast'); 
+});
+
+$('.note_button').click(function(){
+  var id=this.id.substr(11);
+  $('#notes'+id).toggle();
+});
+
+$('.note_area').change(function () {
+  var id=this.id.substr(5),
+      description=$(this).val(),
+      date=$('#date_tag').attr('date');
+  $.ajax({url: "transactions/"+id,
+          type: 'put',
+          dataType: 'json',
+          data: {description:description, date:date} 
+  }).success( function() {  
+    $('#notes'+id).popover({placement: 'right', content: "Saved", trigger: "manual"});
+    $('#notes'+id).popover('show');
+  });
+});
+
+
+$('#no_expense_btn').click(function(){
+  var r=confirm("Are you sure?");
+  var date=$('#date_tag').attr('date');
+  if (r==true) {
+    $.ajax({url: "empty_day",
+            type: 'post',
+            data: {date:date},
+            dataType: 'json'}).success(function(){
+              $('.flow-input').val('0');
+              window.location="/"
+            });
+  }
+});
+
+</script>

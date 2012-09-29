@@ -1,0 +1,4 @@
+$("#li<%= @transaction.id %>").hide('slow');
+var count=$("#transaction_count").html();
+count=parseInt(count)-1;
+$("#transaction_count").html(count);

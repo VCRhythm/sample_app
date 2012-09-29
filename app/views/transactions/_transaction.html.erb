@@ -1,0 +1,10 @@
+<% if transaction.flow_id>0 %>
+<li id='li<%= transaction.id %>'>
+  <span class="content"><%= transaction.flow.name %>: <%=transaction.value %></span>
+  <span class="timestamp">Date: <%= transaction.transaction_date %></span>
+  <% if current_user?(transaction.user) %> | 
+    <%= link_to "delete", transaction, method: :delete, :data=>{:confirm=> "You sure?"},
+                                    title: transaction.flow.name, remote: :true %>
+  <% end %> 
+</li>
+<% end %>

@@ -1,0 +1,5 @@
+<% debt_percent=(Float(@debt_acct.balance)/@debt_acct.initial_balance)*100 %>
+<h3><%= @debt_acct.name %>: <%= number_to_currency(@debt_acct.balance, options={:precision=>0}) %></h3>
+<div class="progress progress-info">
+  <div class="bar" style="width: <%= debt_percent %>%"></div>
+</div>

@@ -1,0 +1,26 @@
+<div class="center_flow">
+  <span>FLOW</span>
+  <section>
+      <%= render 'shared/flow_form' %>
+  </section>
+<%= form_for @transaction, :html=> {:class=>'form-inline'} do |t| %>
+  <%= collection_select(:transaction, :flow_id, @user.flows, :id, :name) %>
+  <%= button_tag(:type=>'button', :id=>'toggle_new_flow', :class=> 'btn') do %>+<% end %><br/>
+  <%= t.date_select :transaction_date, options = {:end_year=> Time.now.year, :use_short_month=>true, :order=>[:day, :month, :year]}, class: "input-small" %>
+  <div class="input-prepend input-append">
+    <span class="add-on">$</span><%= t.number_field :value, :class=> 'input-medium', :placeholder=>'Value', :options => {:min=>'0'} %><span class="add-on">.00</span>
+  </div>
+  <%= t.submit "New", class: "btn" %>
+<% end %>
+</div>
+
+<script type="text/javascript">
+$('.flow_field').toggle();
+$('#toggle_new_flow').click(function(){
+  $('.flow_field').toggle();
+  $("label[for='transaction_Flow']").toggle();
+  $("#transaction_flow_id").toggle();
+  if($('#toggle_new_flow').text() == '+') $('#toggle_new_flow').text('-');
+  else $('#toggle_new_flow').text('+');
+});
+</script>

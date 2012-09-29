@@ -1,0 +1,5 @@
+<li id='li<%= flow.id %>'>
+  <span class="content"><%= flow.name %></span>
+    <%= link_to "delete", flow, method: :delete, :data=>{:confirm=> "You sure?"},
+                                    title: flow.name, remote: :true %>
+</li>
