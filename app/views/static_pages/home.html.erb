@@ -19,6 +19,18 @@
 <% end %> 
 
 <script type="text/javascript">
+$(document).ready(function(){
+  $('.bar').popover({placement:'top', trigger:'hover'});
+});
+
+/* $('.flowHeader').hover(function(){
+  var name=$(this).html();
+  $('.'+name).popover('show');
+}, function(){
+  $('.'+name).popover('hide');
+  }
+);*/
+
 $('.flow-input').change(function () {
   var id=this.id.substr(6),
       value=$(this).val(),
@@ -39,6 +51,10 @@ $('.flow-input').change(function () {
 });
 
 $('.flow-input').focus(function() {
+  $('.popover').hide('fast'); 
+});
+
+$('.note_area').focus(function() {
   $('.popover').hide('fast'); 
 });
 
@@ -64,7 +80,6 @@ $('.note_area').change(function () {
     $('#notes'+id).popover('show');
   });
 });
-
 
 $('#no_expense_btn').click(function(){
   var r=confirm("Are you sure?");

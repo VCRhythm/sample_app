@@ -3,7 +3,6 @@ class TransactionsController < ApplicationController
   before_filter :correct_user, only: :destroy
   
   def create
-    #@transaction = current_user.transactions.build(params[:transaction])
     @transaction=current_user.transactions.where(transaction_date: params[:transaction][:transaction_date], flow_id: params[:transaction][:flow_id]).first_or_initialize()
     @transaction.value=params[:transaction][:value]
     if @transaction.save
@@ -36,7 +35,7 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.new
     @transactions = @user.transactions.paginate(page: params[:page])
     @sum_transactions = @transactions.sum(:value).to_f
-    @flows = @user.flows
+    @flows = Flow.all
     render 'show_transactions'
   end
 

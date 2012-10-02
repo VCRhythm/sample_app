@@ -16,10 +16,9 @@ class User < ActiveRecord::Base
   attr_accessible :email, :name, :password, :password_confirmation
   has_secure_password
   has_many :microposts, dependent: :destroy
+  has_many :adjustments, dependent: :destroy
   
-  has_many :transactions, dependent: :destroy
-  has_many :flows, dependent: :destroy, :select=> 'distinct flows.*'
-  
+  has_many :transactions, dependent: :destroy  
   has_and_belongs_to_many :accounts, :join_table=>'users_accounts'
   
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy

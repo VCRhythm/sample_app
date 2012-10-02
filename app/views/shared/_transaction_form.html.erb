@@ -4,7 +4,7 @@
       <%= render 'shared/flow_form' %>
   </section>
 <%= form_for @transaction, :html=> {:class=>'form-inline'} do |t| %>
-  <%= collection_select(:transaction, :flow_id, @user.flows, :id, :name) %>
+  <%= collection_select(:transaction, :flow_id, Flow.all, :id, :name) %>
   <%= button_tag(:type=>'button', :id=>'toggle_new_flow', :class=> 'btn') do %>+<% end %><br/>
   <%= t.date_select :transaction_date, options = {:end_year=> Time.now.year, :use_short_month=>true, :order=>[:day, :month, :year]}, class: "input-small" %>
   <div class="input-prepend input-append">

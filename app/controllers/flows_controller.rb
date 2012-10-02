@@ -17,4 +17,8 @@ class FlowsController < ApplicationController
       format.js
     end
   end
+  def show
+    @check_acct=current_user.accounts.where(:name=>'Cash').first
+    @day=params[:date]
+  end
 end

@@ -13,8 +13,7 @@
 
 class Flow < ActiveRecord::Base
   attr_accessible :description, :name
-  has_one :transaction
-  has_many :users, :through => :transactions
+  has_many :transactions
   
   validates :name, presence: true, length: { maximum: 60 }
   validates :description, length: { maximum: 140 }

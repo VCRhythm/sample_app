@@ -1,6 +1,6 @@
-<li id="<%= flow_question.id %>">
+<li id="<%= flow_question.id %>" class="<%=flow_question.name%>">
   <span class="question_content">
-    <h3><%= flow_question.name %></h3>
+    <h3 class="flowHeader"><%= flow_question.name %></h3>
     <% transaction=@transactions.where('flow_id=? AND transaction_date=?', flow_question.id, @day).first %>
     <% if transaction %>
        <% transaction_value=transaction.value.round %>

@@ -8,11 +8,12 @@ SampleApp::Application.routes.draw do
   resources :accounts
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy]
-  resources :flows, only: [:create, :destroy]
+  resources :flows, only: [:show, :create, :destroy]
   resources :relationships, only: [:create, :destroy]
   
   match '/empty_day', to: 'transactions#empty_day'
   root to: 'static_pages#home'  
+  match '/inspect', to: 'static_pages#inspect'
   match '/fv', to: 'static_pages#fv'
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'

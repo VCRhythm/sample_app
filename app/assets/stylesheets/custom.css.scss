@@ -1,4 +1,5 @@
 @import "bootstrap";
+@import "compass";
 
 $grayMediumLight: #eaeaea;
 
@@ -16,9 +17,6 @@ html {
 
 body {
   padding-top: 60px;
-}
-
-.container {
 }
 
 section {
@@ -67,7 +65,7 @@ p {
   float: left;
   margin-right: 10px;
   font-size: 1.7em;
-  color: #fff;
+  color: white;
   text-transform: uppercase;
   letter-spacing: -1px;
   padding-top: 9px;
@@ -77,6 +75,10 @@ p {
     color: #fff;
     text-decoration: none;
 }}
+.navbar-inner{
+  background:black;
+  }
+.navbar .nav > li > a{ color:white; text-shadow:none;}  
 
 /* footer */
 footer {
@@ -112,6 +114,33 @@ footer {
   @include box_sizing;
 }
 
+.progress {
+.Bills {
+    background-color: rgb(167,199,220); // Old browsers
+@include filter-gradient(#a7c7dc, #85b2d3, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(167,199,220,1) 0%,rgba(133,178,211,1) 100%));
+    }
+    .Events{
+      background-color: rgb(241,231,103); // Old browsers
+@include filter-gradient(#f1e767, #feb645, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(241,231,103,1) 0%,rgba(254,182,69,1) 100%));
+    }
+    .Food{
+      background-color: rgb(242,130,91); // Old browsers
+      @include filter-gradient(#f2825b, #f07146, vertical); // IE6-9
+      @include background-image(linear-gradient(top, rgba(242,130,91,1) 0%,rgba(229,91,43,1) 50%,rgba(240,113,70,1) 100%));    
+    }
+    .Groceries{
+      background-color: rgb(205,235,142); // Old browsers
+      @include filter-gradient(#cdeb8e, #a5c956, vertical); // IE6-9
+      @include background-image(linear-gradient(top,  rgba(205,235,142,1) 0%,rgba(165,201,86,1) 100%));
+    }
+    .Stuff{
+      background-color: rgb(255,255,255); // Old browsers
+      @include filter-gradient(#ffffff, #e5e5e5, vertical); // IE6-9
+      @include background-image(linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%));
+    }
+}
 /* sidebar */
 aside {
   section {
@@ -170,9 +199,16 @@ aside {
 }
 
 /* forms */
+.note_button{
+  margin-left:5px;
+  height:55px;
+}
 
 .note_area{
   display:none;
+  height:55px;
+  margin-bottom:0px;
+  @include box_sizing;
 }
 
 #error_explanation {
@@ -181,6 +217,21 @@ aside {
     list-style: none;
     margin: 0 0 18px 0;
   }
+}
+
+.popover.fade.top {
+  margin-top:-15px;
+  .popover-title{
+    display:block;
+    color:black;
+    font-size:12px;
+    font-weight:bold;
+    text-align:center;
+    padding:0;
+  }
+  .popover-inner{
+  font-size: 14px;
+}
 }
 
 .flow_bar_title{
@@ -242,6 +293,33 @@ aside {
   }
 }
 
+.Bills{
+background-color: rgb(167,199,220); // Old browsers
+@include filter-gradient(#a7c7dc, #85b2d3, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(167,199,220,1) 0%,rgba(133,178,211,1) 100%));
+}
+.Events{
+      background-color: rgb(241,231,103); // Old browsers
+@include filter-gradient(#f1e767, #feb645, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(241,231,103,1) 0%,rgba(254,182,69,1) 100%));
+    }
+.Food{
+background-color: rgb(242,130,91); // Old browsers
+@include filter-gradient(#f2825b, #f07146, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(242,130,91,1) 0%,rgba(229,91,43,1) 50%,rgba(240,113,70,1) 100%)); }
+.Groceries{
+      // needs latest Compass, add '@import "compass"' to your scss
+      background-color: rgb(205,235,142); // Old browsers
+      @include filter-gradient(#cdeb8e, #a5c956, vertical); // IE6-9
+      @include background-image(linear-gradient(top,  rgba(205,235,142,1) 0%,rgba(165,201,86,1) 100%));
+    }
+.Stuff{
+      // needs latest Compass, add '@import "compass"' to your scss
+      background-color: rgb(255,255,255); // Old browsers
+      @include filter-gradient(#ffffff, #e5e5e5, vertical); // IE6-9
+      @include background-image(linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%));
+    }
+    
 .question_content{
   display: block;
   
@@ -253,6 +331,7 @@ aside {
     font-size:40px;
     float:left;
     width:400px;
+    padding-left:10px;
     }
   input[type="text"]{
     font-size:40px;
@@ -270,16 +349,20 @@ aside {
   }
 }
 
+.popover{
+  width:200px;
+}
+
 .popover-title{
-  display:none;
+    display:none;
   }
 .popover-content{
-  
+  padding:0 15px;
+  text-align:center;
   }
 .popover-inner{
-  font-size: 25px;
+  font-size: 20px;
   color: green;
-  width:180px;
 }
   
   
