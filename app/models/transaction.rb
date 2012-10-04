@@ -21,6 +21,5 @@ class Transaction < ActiveRecord::Base
   validates :transaction_date, presence: true
   validates :user_id, presence: true
   validates :flow_id, presence: true
-  validates_uniqueness_of :flow_id, :scope => :transaction_date
   default_scope order: 'transactions.transaction_date DESC'
 end

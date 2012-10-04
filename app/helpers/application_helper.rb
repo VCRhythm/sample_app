@@ -1,6 +1,6 @@
 module ApplicationHelper
   def full_title(page_title)
-    base_title="Money Maker"
+    base_title="Debt Massager"
     if page_title.empty?
       base_title
     else

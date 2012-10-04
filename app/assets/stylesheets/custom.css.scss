@@ -319,7 +319,13 @@ background-color: rgb(242,130,91); // Old browsers
       @include filter-gradient(#ffffff, #e5e5e5, vertical); // IE6-9
       @include background-image(linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%));
     }
-    
+  
+.incomeBoost{
+  
+}
+  
+#slider{ margin:10px;}
+  
 .question_content{
   display: block;
   

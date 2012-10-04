@@ -1,9 +1,10 @@
 <% debt_percent=(Float(@cash)/@adj_check_balance)*100 %>
-<h3>Available Income: <%= number_to_currency(@cash, options={:precision=>0})+" (Updated "+@check_acct.created_at.strftime('%b. %e, %Y')+")"%></h3>
+<h3>Available Income: <a class="incomeVal" cash="<%= @cash %>"><%= number_to_currency(@cash, options={:precision=>0})%></a>
+<span class="incomeBoost"><span class="add-on">BOOST: $</span><%= text_field_tag 'incomeBoost', nil, :placeholder=>'0', :class=> 'input-mini', :id=>'incomeBoost' %><span class="add-on">.00</span> <div id="slider"></div></span> (Updated <%= @check_acct.created_at.strftime('%b. %e, %Y') %>)</h3>
 <div class="progress">
-  <div class="bar bar-success" style="width: <%= debt_percent %>%;" value="<%= @cash %>" data-content="<%= @adjustment_string %>" data-original-title="Adjustments" ></div>
+  <div class="bar bar-success" id="incomeBar" style="width: <%= debt_percent %>%;" value="<%= @cash %>" max-value='<%= @adj_check_balance %>'></div>
   <% @flow_sum.each {|key, value| if value>0%>
     <% flow_name=Flow.where(:id=>key).first.name %>
-    <div class="bar <%=flow_name %>" style="width: <%= (value/@adj_check_balance)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= flow_name %>"></div>
+    <div class="bar expense <%=flow_name %>" style="width: <%= (value/@adj_check_balance)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= flow_name %>"></div>
   <% end } %>
 </div>

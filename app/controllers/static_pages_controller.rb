@@ -19,7 +19,7 @@ class StaticPagesController < ApplicationController
       @accounts=@user.accounts
       @debt_acct = @accounts.where(:name=>'Targeted Debt').first
       @check_acct = @accounts.where(:name=>'Cash').first
-      @shared_users = Account.where(:id=>@check_acct.id).first.users
+      @shared_users = Account.where(:id=>@check_acct.id).first.users.includes(:adjustments)
       @adjustments = Hash.new
       @shared_users.each do |user|
         user.adjustments.each do |adjustment|
@@ -37,7 +37,7 @@ class StaticPagesController < ApplicationController
         @adjustment_string += Adjustment.where(:id=>key).first.name+": "+value.to_s
         x+=1
       }
-      @flows = Flow.all
+      @flows = Flow.includes(:transactions)
       @check_date = @check_acct.created_at.to_date
       @flow_sum=Hash.new
       @flows.each do |flow|
@@ -48,7 +48,7 @@ class StaticPagesController < ApplicationController
       end
       @adj_check_balance=@check_acct.balance+@adjustment_total
       @spending_sum = @flow_sum.values.inject{|sum, x| sum+x}
-      @cash = @adj_check_balance-@spending_sum
+      @cash = (@adj_check_balance-@spending_sum).round
       #@feed_items = current_user.feed.paginate(page: params[:page])
     end
   end
