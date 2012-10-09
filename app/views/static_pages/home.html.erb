@@ -36,21 +36,67 @@ $(document).ready(function(){
     max:100,
     step:5,
     change: function(event, ui){
-        var incomeBoost=parseInt($('#incomeBoost').val())*(ui.value*.01),
-            incomeVal=parseInt($('.incomeVal').attr('cash')),
-            total=parseInt($('#incomeBar').attr('max-value'))+incomeBoost,
-            newIncome=incomeVal+incomeBoost,
-            newWidth=(newIncome/total)*100+'%',
-            expenseWidth=0;
-        $(".expense").each(function(index, object){
-          expenseWidth=(Number($(this).attr('data-content').replace(/[^0-9\.]+/g,""))/total)*100+'%';
-          $(this).width(expenseWidth);
-        });
-        $('#incomeBar').width(newWidth);
-        $('.incomeVal').html(toUSD(newIncome));
+      addIncome(ui.value);
     }});
 });
 
+$('#incomeBoost').change(function(){
+  addIncome($('#slider').slider("option", "value"));
+});
+
+$('#incomeVal').click(function(){
+  $('#incomeBoostSpan').toggle();
+});
+
+$('#saveIncome').click(function(){
+  var balance=Number($('#incomeVal').html().replace(/[^0-9\.]+/g,"")),
+      initialBalance=$('#incomeVal').attr('cash');
+  var cashAccount={
+    name: "Cash",
+    balance: balance,
+    initial_balance: initialBalance
+    }
+  $.ajax({url: "accounts",
+          type: 'post',
+          dataType: 'json',
+          data: {account:cashAccount} 
+  }).success( function() {  
+    $('#incomeBoostSpan').hide();
+    $('#incomeVal').attr('cash', balance);
+  });
+});
+
+$('#cancelIncome').click(function(){
+  $('#incomeBoostSpan').toggle();
+  $('#incomeBoost').val(null);
+  $('#cancelIncome').hide();
+  $('#saveIncome').hide();
+  addIncome($('#slider').slider("option", "value"));
+});
+
+function addIncome(value){
+  var addIncome = parseInt($('#incomeBoost').val()) || 0,
+      incomeBoost= addIncome*(value*.01),
+      total=parseInt($('#incomeBar').attr('max-value'))+incomeBoost,
+      newIncome=parseInt($('#incomeVal').attr('cash'))+incomeBoost,
+      newWidth=(newIncome/total)*100+'%',
+      expenseWidth=0,
+      debtInitialBalance=parseInt($('#debtBar').attr('total')),
+      debtVal=parseInt($('#debtBalance').attr('balance'))-(addIncome-incomeBoost),
+      debtWidth=(debtVal/debtInitialBalance)*100+'%';
+  $(".expense").each(function(index, object){
+   expenseWidth = (Number($(this).attr('data-content').replace(/[^0-9\.]+/g,""))/total)*100+'%';
+    $(this).width(expenseWidth);
+  });
+  $('#debtBar').width(debtWidth);
+  $('#debtBalance').html(toUSD(debtVal));
+  $('#incomeBar').width(newWidth);
+  $('#incomeVal').html(toUSD(newIncome));
+  if (addIncome) {
+    $('#saveIncome').show();
+    $('#cancelIncome').show();
+  }
+}
 
 /* $('.flowHeader').hover(function(){
   var name=$(this).html();
@@ -64,6 +110,7 @@ $('.flow-input').change(function () {
   var id=this.id.substr(6),
       value=$(this).val(),
       date=$('#date_tag').attr('date');
+  if (!value) value=parseInt($(this).attr('placeholder'));
   var transaction={
     flow_id: id,
     value: value,
@@ -76,6 +123,11 @@ $('.flow-input').change(function () {
   }).success( function() {  
     $('#input_'+id).popover({placement: 'left', content: "Saved Flow", trigger: "manual"});
     $('#input_'+id).popover('show');
+    oldValue=$('#input_'+id).attr('placeholder');
+    $('#input_'+id).attr('placeholder', value);
+    newIncome=parseInt($('#incomeVal').attr('cash'))-(value - oldValue);
+    $('#incomeVal').html(toUSD(newIncome));
+    $('#incomeVal').attr('cash', newIncome);
   });
 });
 

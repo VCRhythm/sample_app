@@ -1,10 +1,10 @@
-<% debt_percent=(Float(@cash)/@adj_check_balance)*100 %>
-<h3>Available Income: <a class="incomeVal" cash="<%= @cash %>"><%= number_to_currency(@cash, options={:precision=>0})%></a>
-<span class="incomeBoost"><span class="add-on">BOOST: $</span><%= text_field_tag 'incomeBoost', nil, :placeholder=>'0', :class=> 'input-mini', :id=>'incomeBoost' %><span class="add-on">.00</span> <div id="slider"></div></span> (Updated <%= @check_acct.created_at.strftime('%b. %e, %Y') %>)</h3>
+<% debt_percent=(Float(@cash)/@check_acct.balance)*100 %>
+<h3>Available Income: <a id="incomeVal" cash="<%= @cash %>"><%= number_to_currency(@cash, options={:precision=>0})%></a> (Updated <%= @check_acct.created_at.strftime('%b. %e, %Y') %>)
+<div id="incomeBoostSpan">BOOST:<span class="add-on">$</span><%= text_field_tag 'incomeBoost', nil, :placeholder=>'0', :class=> 'input-mini', :id=>'incomeBoost' %><span class="add-on">.00</span> <%= button_tag 'Save', :id=>'saveIncome', :class=>'btn btn-medium btn-success' %> <%= button_tag 'Cancel', :id=>'cancelIncome', :class=>'btn btn-medium btn-warning' %> <div id="slider"></div></div></h3>
 <div class="progress">
-  <div class="bar bar-success" id="incomeBar" style="width: <%= debt_percent %>%;" value="<%= @cash %>" max-value='<%= @adj_check_balance %>'></div>
-  <% @flow_sum.each {|key, value| if value>0%>
+  <div class="bar bar-success" id="incomeBar" style="width: <%= debt_percent-0.1 %>%;" value="<%= @cash %>" max-value="<%= @check_acct.balance %>"></div> <!-- -0.1% to keep bar from sliding -->
+  <% @flow_sum.each {|key, value| if value>0 %>
     <% flow_name=Flow.where(:id=>key).first.name %>
-    <div class="bar expense <%=flow_name %>" style="width: <%= (value/@adj_check_balance)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= flow_name %>"></div>
+    <div class="bar expense <%=flow_name %>" style="width: <%= (value/@check_acct.balance)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= flow_name %>"></div>
   <% end } %>
 </div>

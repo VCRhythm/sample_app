@@ -11,7 +11,7 @@
 #
 
 class Account < ActiveRecord::Base
-  attr_accessible :balance, :name, :user_id, :initial_balance
+  attr_accessible :balance, :name, :user_id, :initial_balance, :created_at
   has_and_belongs_to_many :users, :join_table=>'users_accounts'
   
   default_scope order: 'accounts.created_at DESC'

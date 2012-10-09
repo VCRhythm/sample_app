@@ -135,6 +135,11 @@ footer {
       @include filter-gradient(#cdeb8e, #a5c956, vertical); // IE6-9
       @include background-image(linear-gradient(top,  rgba(205,235,142,1) 0%,rgba(165,201,86,1) 100%));
     }
+    .Services{
+background-color: rgb(229,181,173); // Old browsers
+@include filter-gradient(#e5b5ad, #c6968a, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(229,181,173,1) 0%,rgba(213,167,157,1) 48%,rgba(198,150,138,1) 100%));
+}
     .Stuff{
       background-color: rgb(255,255,255); // Old browsers
       @include filter-gradient(#ffffff, #e5e5e5, vertical); // IE6-9
@@ -204,8 +209,31 @@ aside {
   height:55px;
 }
 
-.note_area{
+#incomeBoostSpan{
   display:none;
+  border: black 5px dashed;
+  text-align:center;
+  width:400px;
+  margin:10px auto;
+  padding:10px;
+  @include box_sizing;
+  input[type="text"]{
+    text-align:right;
+    font-size:20px;
+    line-height:25px;
+    padding:5px 5px 2px;
+    height:auto;
+  }
+  button{
+    display:none;
+    }
+  #slider{
+    margin:10px;
+  }
+
+}
+
+.note_area{
   height:55px;
   margin-bottom:0px;
   @include box_sizing;
@@ -236,9 +264,6 @@ aside {
 
 .flow_bar_title{
   margin-right: 5px;
-}
-
-.form-inline{
 }
 
 .center_flow{
@@ -308,26 +333,27 @@ background-color: rgb(242,130,91); // Old browsers
 @include filter-gradient(#f2825b, #f07146, vertical); // IE6-9
 @include background-image(linear-gradient(top, rgba(242,130,91,1) 0%,rgba(229,91,43,1) 50%,rgba(240,113,70,1) 100%)); }
 .Groceries{
-      // needs latest Compass, add '@import "compass"' to your scss
       background-color: rgb(205,235,142); // Old browsers
       @include filter-gradient(#cdeb8e, #a5c956, vertical); // IE6-9
       @include background-image(linear-gradient(top,  rgba(205,235,142,1) 0%,rgba(165,201,86,1) 100%));
     }
+.Services{
+background-color: rgb(229,181,173); // Old browsers
+@include filter-gradient(#e5b5ad, #c6968a, vertical); // IE6-9
+@include background-image(linear-gradient(top, rgba(229,181,173,1) 0%,rgba(213,167,157,1) 48%,rgba(198,150,138,1) 100%));
+}
 .Stuff{
-      // needs latest Compass, add '@import "compass"' to your scss
       background-color: rgb(255,255,255); // Old browsers
       @include filter-gradient(#ffffff, #e5e5e5, vertical); // IE6-9
       @include background-image(linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%));
     }
-  
-.incomeBoost{
-  
-}
-  
-#slider{ margin:10px;}
-  
+    
 .question_content{
   display: block;
+  .note_area{
+    display:none;
+  }
+
   
   vertical-align:bottom;
   .add-on{
@@ -343,7 +369,6 @@ background-color: rgb(242,130,91); // Old browsers
     font-size:40px;
     height:auto;
     text-align:right;
-    line-height:45px;
   }
   input[type="submit"]{
     font-size:20px;
