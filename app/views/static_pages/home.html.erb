@@ -31,10 +31,12 @@ function toUSD(number) {
 
 $(document).ready(function(){
   $('.bar').popover({placement:'top', trigger:'hover'});
+  $('#incomeVal').popover({placement:'top', trigger:'hover'});
   $('#slider').slider({
     min:0, 
     max:100,
     step:5,
+    value:100,
     change: function(event, ui){
       addIncome(ui.value);
     }});
@@ -49,17 +51,17 @@ $('#incomeVal').click(function(){
 });
 
 $('#saveIncome').click(function(){
-  var balance=Number($('#incomeVal').html().replace(/[^0-9\.]+/g,"")),
-      initialBalance=$('#incomeVal').attr('cash');
-  var cashAccount={
-    name: "Cash",
-    balance: balance,
-    initial_balance: initialBalance
+  var balance=Number($('#incomeVal').html().replace(/[^0-9\.]+/g,""))-$('#incomeVal').attr('cash')+parseInt($('#incomeBoost').attr('placeholder')),
+      date=$('#date_tag').attr('date');
+  var cashFlow={
+    flow_id: 54, //hardcoded in
+    value: balance,
+    transaction_date: date
     }
-  $.ajax({url: "accounts",
+  $.ajax({url: "transactions",
           type: 'post',
           dataType: 'json',
-          data: {account:cashAccount} 
+          data: {transaction:cashFlow} 
   }).success( function() {  
     $('#incomeBoostSpan').hide();
     $('#incomeVal').attr('cash', balance);
@@ -71,12 +73,15 @@ $('#cancelIncome').click(function(){
   $('#incomeBoost').val(null);
   $('#cancelIncome').hide();
   $('#saveIncome').hide();
-  addIncome($('#slider').slider("option", "value"));
+  $('#slider').slider("option", "value", 100);
+  $('#incomeVal').html(toUSD($('#incomeVal').attr('cash')));
+  addIncome(100);
 });
 
 function addIncome(value){
-  var addIncome = parseInt($('#incomeBoost').val()) || 0,
-      incomeBoost= addIncome*(value*.01),
+  var placeHolder = parseInt($('#incomeBoost').attr('placeholder')),
+      addIncome = parseInt($('#incomeBoost').val()) || placeHolder || 0,
+      incomeBoost = addIncome*(value*.01)-placeHolder,
       total=parseInt($('#incomeBar').attr('max-value'))+incomeBoost,
       newIncome=parseInt($('#incomeVal').attr('cash'))+incomeBoost,
       newWidth=(newIncome/total)*100+'%',
@@ -88,14 +93,13 @@ function addIncome(value){
    expenseWidth = (Number($(this).attr('data-content').replace(/[^0-9\.]+/g,""))/total)*100+'%';
     $(this).width(expenseWidth);
   });
+  $('#incomeVal').attr('data-content', toUSD(incomeBoost+placeHolder));
   $('#debtBar').width(debtWidth);
   $('#debtBalance').html(toUSD(debtVal));
   $('#incomeBar').width(newWidth);
   $('#incomeVal').html(toUSD(newIncome));
-  if (addIncome) {
-    $('#saveIncome').show();
-    $('#cancelIncome').show();
-  }
+  $('#saveIncome').show();
+  $('#cancelIncome').show();
 }
 
 /* $('.flowHeader').hover(function(){
@@ -163,7 +167,7 @@ $('.note_area').change(function () {
 });
 
 $('#no_expense_btn').click(function(){
-  var r=confirm("Are you sure?");
+  var r=confirm("Are you sure there were no flows?");
   var date=$('#date_tag').attr('date');
   if (r==true) {
     $.ajax({url: "empty_day",

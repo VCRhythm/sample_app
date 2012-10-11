@@ -1,6 +1,13 @@
 <% debt_percent=(Float(@cash)/@check_acct.balance)*100 %>
-<h3>Available Income: <a id="incomeVal" cash="<%= @cash %>"><%= number_to_currency(@cash, options={:precision=>0})%></a> (Updated <%= @check_acct.created_at.strftime('%b. %e, %Y') %>)
-<div id="incomeBoostSpan">BOOST:<span class="add-on">$</span><%= text_field_tag 'incomeBoost', nil, :placeholder=>'0', :class=> 'input-mini', :id=>'incomeBoost' %><span class="add-on">.00</span> <%= button_tag 'Save', :id=>'saveIncome', :class=>'btn btn-medium btn-success' %> <%= button_tag 'Cancel', :id=>'cancelIncome', :class=>'btn btn-medium btn-warning' %> <div id="slider"></div></div></h3>
+<% transaction=@transactions.where('flow_id=? AND transaction_date=?', 54, @day).first %>
+<% if transaction %>
+  <% transaction_value=transaction.value.round %>
+<% else %>
+  <% transaction_value=0 %>
+<% end %>
+
+<h3>Available Income: <a id="incomeVal" rel="popover" data-content="$<%= transaction_value %>" data-original-title="BOOST" cash="<%= @cash %>"><%= number_to_currency(@cash, options={:precision=>0})%></a> <% if transaction_value>0 %>(BOOSTED)<% end %> (Updated <%= @check_acct.created_at.strftime('%b. %e, %Y') %>)
+<div id="incomeBoostSpan">BOOST:<span class="add-on">$</span><%= text_field_tag 'incomeBoost', nil, :placeholder=>transaction_value, :class=> 'input-mini', :id=>'incomeBoost' %><span class="add-on">.00</span> <%= button_tag 'Save', :id=>'saveIncome', :class=>'btn btn-medium btn-success' %> <%= button_tag 'Cancel', :id=>'cancelIncome', :class=>'btn btn-medium btn-warning' %> <div id="slider"></div></div></h3>
 <div class="progress">
   <div class="bar bar-success" id="incomeBar" style="width: <%= debt_percent-0.1 %>%;" value="<%= @cash %>" max-value="<%= @check_acct.balance %>"></div> <!-- -0.1% to keep bar from sliding -->
   <% @flow_sum.each {|key, value| if value>0 %>

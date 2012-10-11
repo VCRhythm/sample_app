@@ -3,9 +3,16 @@ class StaticPagesController < ApplicationController
     if signed_in?
       @user=current_user
       @micropost = @user.microposts.build
+      #@sum_transactions = @transactions.sum(:value).to_f
+      @accounts=@user.accounts
+      #@debt_acct = @accounts.where(:name=>'Targeted Debt').first
+      #@debtInitialBalance = @accounts.where(:name=>'Targeted Debt').last.balance
+      @check_acct = @accounts.where(:name=>'Cash').first
+      @shared_users = Account.where(:id=>@check_acct.id).first.users
+      @check_date = @check_acct.created_at.to_date
+      @flows = Flow.includes(:transactions)
       @transaction = Transaction.new
       @transactions = @user.transactions
-      #@sum_transactions = @transactions.sum(:value).to_f
       if params[:date]
         @day=Date.parse(params[:date])
       elsif @transactions.any?
@@ -16,20 +23,15 @@ class StaticPagesController < ApplicationController
       else
         @day=Date.current
       end
-      @accounts=@user.accounts
-      @debt_acct = @accounts.where(:name=>'Targeted Debt').first
-      @debtInitialBalance = @accounts.where(:name=>'Targeted Debt').last.balance
-      @check_acct = @accounts.where(:name=>'Cash').first
-      @shared_users = Account.where(:id=>@check_acct.id).first.users
-      @flows = Flow.includes(:transactions)
-      @check_date = @check_acct.created_at.to_date
       @flow_sum=Hash.new
       @flows.each do |flow|
         @flow_sum[flow.id]=0
         @shared_users.each do |user|
-          @flow_sum[flow.id] += Transaction.where("transaction_date >= ? AND flow_id=? AND user_id=?", @check_date, flow.id, user.id).sum(:value)
+          @flow_sum[flow.id] += user.transactions.where("transaction_date >= ? AND transaction_date <= ? AND flow_id=?", @check_date, Date.current, flow.id).sum(:value)
         end
       end
+      @check_acct.balance += @flow_sum[54]
+      @flow_sum.delete(54)
       @spending_sum = @flow_sum.values.inject{|sum, x| sum+x}
       @cash = (@check_acct.balance-@spending_sum).round
       #@feed_items = current_user.feed.paginate(page: params[:page])

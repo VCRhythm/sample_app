@@ -2,6 +2,7 @@ class FlowsController < ApplicationController
   def new
   end
   def create
+    @flow=Flow.create(params[:flow])
     respond_to do |format|
       format.html { redirect_to root_url}
       format.js
