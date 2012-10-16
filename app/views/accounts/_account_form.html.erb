@@ -1,0 +1,8 @@
+<%= form_for(current_user.accounts.new, remote: true) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+    <%= f.text_field :name, placeholder: "Name of new debt" %>:  
+    $<%= f.text_field :balance, placeholder: "Balance" %>.00
+  </div>
+  <%= f.submit "Add", class: "btn btn-large btn-primary" %>
+<% end %>

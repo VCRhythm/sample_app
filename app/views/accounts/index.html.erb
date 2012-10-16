@@ -1,0 +1,12 @@
+<% provide(:title, 'Account Setup') %>
+<h1>Account Setup</h1>
+
+<%= will_paginate %>
+
+<ul class="microposts">
+  <%= render @accounts %>
+</ul>
+
+<%= render 'account_form' %>
+
+<%= will_paginate %>
