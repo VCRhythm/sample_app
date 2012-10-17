@@ -20,7 +20,7 @@ class TransactionsController < ApplicationController
       format.js
     end
   end
-  
+    
   def empty_day
     current_user.transactions.where("transaction_date =? AND flow_ID <> ?", params[:date], 54).delete_all
     current_user.transactions.create(:transaction_date => params[:date], :flow_id=>'0', :value=>'0')

@@ -1,0 +1,3 @@
+<li id='li<%= adjustment.id %>'>
+  <%= adjustment.name %>: <%= adjustment.value %> | <%= link_to "delete", adjustment, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
+</li>

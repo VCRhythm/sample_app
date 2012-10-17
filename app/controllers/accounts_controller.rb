@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+before_filter :signed_in_user, only: [:create, :destroy]
   def create
     @user=current_user
     @account = Account.create(params[:account])
@@ -26,7 +27,8 @@ class AccountsController < ApplicationController
     end
   end
   def index
-    @accounts=current_user.accounts.paginate(page: params[:page])
+    @user=current_user
+    @accounts=@user.accounts.paginate(page: params[:page])
   end
   def destroy
     @account = Account.find(params[:id])

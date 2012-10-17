@@ -17,7 +17,8 @@ class FlowsController < ApplicationController
     end
   end
   def show
-    @check_acct=current_user.accounts.where(:name=>'Cash').first
-    @day=params[:date]
+    @user=current_user
+    @flow=Flow.find(params[:id])
+    @transactions=@user.transactions.where(flow_id: @flow.id).paginate(page: params[:page])
   end
 end

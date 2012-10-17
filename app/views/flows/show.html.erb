@@ -1,1 +1,23 @@
-<%= @day %>
+<% provide(:title, @flow.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @user.name %>
+      </h1>
+    </section>
+    <section>
+      <%= render 'shared/stats' %>
+    </section>
+  </aside>
+  <div class="span8">
+    <% if @transactions.any? %>
+      <h3>Transactions (<%= @transactions.count %>)</h3>
+      <ol class="microposts">
+        <%= render @transactions %>
+      </ol>
+      <%= will_paginate @transactions %>
+    <% end %>
+  </div>
+</div>

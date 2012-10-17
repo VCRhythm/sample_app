@@ -11,7 +11,7 @@
 <div class="progress">
   <div class="bar bar-success" id="incomeBar" style="width: <%= debt_percent-0.1 %>%;" value="<%= @cash %>" max-value="<%= @check_acct.balance %>"></div> <!-- -0.1% to keep bar from sliding -->
   <% @flow_sum.each {|key, value| if value>0 %>
-    <% flow_name=Flow.where(:id=>key).first.name %>
-    <div class="bar expense <%=flow_name %>" style="width: <%= (value/@check_acct.balance)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= flow_name %>"></div>
+    <% @flow=Flow.where(:id=>key).first %>
+    <%=link_to(@flow) do %><div class="bar expense <%=@flow.name %>" style="width: <%= (value/@check_acct.balance)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= @flow.name %>"></div><% end %>
   <% end } %>
 </div>

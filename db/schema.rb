@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121011120306) do
+ActiveRecord::Schema.define(:version => 20121016133904) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -29,18 +29,16 @@ ActiveRecord::Schema.define(:version => 20121011120306) do
     t.datetime "updated_at", :null => false
     t.string   "name"
     t.integer  "user_id"
+    t.integer  "key_id"
   end
 
   create_table "flows", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.integer  "transaction_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "user_id"
   end
-
-  add_index "flows", ["transaction_id"], :name => "index_flows_on_transaction_id"
 
   create_table "microposts", :force => true do |t|
     t.string   "content"

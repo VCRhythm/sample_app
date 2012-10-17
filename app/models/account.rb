@@ -15,4 +15,8 @@ class Account < ActiveRecord::Base
   has_and_belongs_to_many :users, :join_table=>'users_accounts'
   
   default_scope order: 'accounts.created_at DESC'
+  
+  def registered?(user)
+    users.find(user.id)
+  end
 end

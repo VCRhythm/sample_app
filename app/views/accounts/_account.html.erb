@@ -1,3 +1,13 @@
-<li>
-  <%= link_to account.name, account %> | <%= link_to "delete", account, method: :delete, data: { confirm: "Are you sure?" } %>
+<li id='li<%= account.id %>'>
+  <%= link_to account.name, account %> | <%= link_to "delete", account, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
+  <br/>Users:
+  <div class="btn-group" data-toggle="buttons-checkbox">
+    <% @user.followed_users.each do |user| %>
+      <% if account.registered?(user) %>
+        <button type="button" class="btn togglebtn"><%=user.name%></button>
+      <% else %>
+        <button type="button" class="btn"><%=user.name%></button>
+      <% end %>
+    <% end %>
+  </div>
 </li>

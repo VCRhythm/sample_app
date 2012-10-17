@@ -1,69 +1,26 @@
 class AdjustmentsController < ApplicationController
-  before_filter :signed_in_user, only: [:create, :destroy]
-  before_filter :correct_user, only: :destroy
-  
+before_filter :signed_in_user, only: [:create, :destroy]
   def create
-    @transaction=current_user.transactions.where(transaction_date: params[:transaction][:transaction_date], flow_id: params[:transaction][:flow_id]).first_or_initialize()
-    @transaction.value=0
-    @transaction.value = params[:transaction][:value] || 0
-    if @transaction.save
-      flash.now[:success]="Added Transaction"
-    else
-      err = ''
-      @transaction.errors.full_messages.each do |m|
-        err << m << '. '
-      end
-      flash.now[:alert]="#{err}"
-    end
+    @user=current_user
+    @adjustment = @user.adjustments.create(params[:adjustment])
     respond_to do |format|
-      format.html {redirect_to transactions_path(current_user)}
+      format.html { redirect_to root_url}
       format.js
     end
   end
-  
-  def empty_day
-    current_user.transactions.where("transaction_date =? AND flow_ID <> ?", params[:date], 54).delete_all
-    current_user.transactions.create(:transaction_date => params[:date], :flow_id=>'0', :value=>'0')
-    respond_to do |format|
-      format.html {redirect_to transactions_path(current_user)}
-      format.js {}
-    end
-  end
-  
   def index
-    @title = "Transactions"
-    @user = current_user
-    @transaction = Transaction.new
-    @transactions = @user.transactions.paginate(page: params[:page])
-    @sum_transactions = @transactions.sum(:value).to_f
-    @flows = Flow.all
-    render 'show_transactions'
+    @adjustments=current_user.adjustments.paginate(page: params[:page])
   end
-
   def destroy
-    @transaction.destroy
+    @user=current_user
+    @adjustment = @user.adjustments.find(params[:id])
+    @adjustment.destroy
     respond_to do |format|
-      format.html {redirect_to transactions_user_path(current_user)}
+      format.html { redirect_to adjustments_path}
       format.js
     end
   end
-  
-  def update
-    @transaction=current_user.transactions.where(transaction_date: params[:date], flow_id: params[:id]).first_or_initialize()
-    @transaction.description=params[:description]
-    if @transaction.description==""
-      @transaction.description=nil
-    end
-    @transaction.save
-    respond_to do |format|
-      format.html {redirect_to transactions_user_path(current_user)}
-      format.js
-    end
+  def show
+    @adjustment = Adjustment.find(params[:id])
   end
-
-  private
-    def correct_user
-      @transaction = current_user.transactions.find_by_id(params[:id])
-      redirect_to root_url if @transaction.nil?
-    end
 end
