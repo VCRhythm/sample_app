@@ -1,0 +1,10 @@
+<h3>Available Income: <a id="incomeVal" rel="popover" data-content="$<%= @cashValue %>" data-original-title="BOOST" value="<%= @cash %>" cash="<%= @cash %>"><%= number_to_currency(@cash, options={:precision=>0})%></a> <% if @cashValue>0 %>(BOOSTED)<% end %> (Updated <%= @check_acct.created_at.strftime('%b. %e, %Y') %>)
+<div id="incomeBoostSpan">BOOST:<span class="add-on">$</span><%= text_field_tag 'incomeBoost', nil, :placeholder=>@cashValue, :class=> 'input-mini', :id=>'incomeBoost' %><span class="add-on">.00</span> <%= button_tag 'Save', :id=>'saveIncome', :class=>'btn btn-medium btn-success' %> <%= button_tag 'Cancel', :id=>'cancelIncome', :class=>'btn btn-medium btn-warning' %> <div id="slider"></div></div></h3>
+<div class="progress" expense-value="<%= @spending_sum+@adjustment_sum %>" >
+  <div class="bar <%=@cash_bar%>" id="incomeBar" style="width: <%= ((Float(@cash)/@total)*100)-0.1 %>%;" value="<%= @cash %>" max-value="<%= @total %>"></div> <!-- -0.1% to keep bar from sliding -->
+  <%=link_to adjustments_path do %><div class="bar expense bar-warning" id="adjustBar" style="width: <%=Float(@adjustment_sum.abs)/@total*100 %>%;" rel="popover" data-content="$<%= @adjustment_sum.to_i %>" data-original-title="Monthly Drain"></div><% end %>
+  <% @flow_sum.each {|key, value| if value>0 %>
+    <% @flow=Flow.where(:id=>key).first %>
+    <%=link_to(@flow) do %><div class="bar expense <%=@flow.name %>" style="width: <%= (value/@total)*100 %>%;" rel="popover" data-content="$<%= value.to_i %>" data-original-title="<%= @flow.name %>"></div><% end %>
+  <% end } %>
+</div>

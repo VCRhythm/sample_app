@@ -4,7 +4,6 @@ class TransactionsController < ApplicationController
   
   def create
     @transaction=current_user.transactions.where(transaction_date: params[:transaction][:transaction_date], flow_id: params[:transaction][:flow_id]).first_or_initialize()
-    @transaction.value=0
     @transaction.value = params[:transaction][:value] || 0
     if @transaction.save
       flash.now[:success]="Added Transaction"

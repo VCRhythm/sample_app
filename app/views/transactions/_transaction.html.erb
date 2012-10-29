@@ -1,6 +1,12 @@
 <% if transaction.flow_id>0 && transaction.value > 0%>
 <li id='li<%= transaction.id %>'>
-  <span class="content"><%= transaction.description %>: <%=transaction.value %></span>
+  <span class="userIcon"><%= gravatar_for transaction.user %></span><span class="content"><b>
+  <% if transaction.description %>
+    <%= transaction.description %>
+  <% else %>
+    <%= Flow.where(id: transaction.flow.id).first.name %>
+  <% end %>
+  :</b> $<%=transaction.value.round(0) %></span>
   <span class="timestamp">Date: <%= transaction.transaction_date %></span>
   <% if current_user?(transaction.user) %> | 
     <%= link_to "delete", transaction, method: :delete, :data=>{:confirm=> "You sure?"}, title: transaction.flow.name, remote: :true %>

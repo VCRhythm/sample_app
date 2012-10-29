@@ -11,12 +11,17 @@
 #
 
 class Account < ActiveRecord::Base
-  attr_accessible :balance, :name, :user_id, :initial_balance, :created_at
-  has_and_belongs_to_many :users, :join_table=>'users_accounts'
-  
+  attr_accessible :balance, :name, :initial_balance, :owner
+  has_many :priorities, dependent: :destroy
+
+  has_many :users, through: :priorities
+  has_many :transactions, through: :users
+  has_many :adjustments, through: :users
+ 
   default_scope order: 'accounts.created_at DESC'
   
-  def registered?(user)
-    users.find(user.id)
+  def registered?(user_id)
+    users.find_by_id(user_id)
   end
+  
 end

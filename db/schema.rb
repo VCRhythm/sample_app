@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121016133904) do
+ActiveRecord::Schema.define(:version => 20121029145905) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20121016133904) do
     t.integer  "initial_balance"
     t.float    "rate"
     t.integer  "minimum"
+    t.integer  "owner"
   end
 
   create_table "adjustments", :force => true do |t|
@@ -48,6 +49,14 @@ ActiveRecord::Schema.define(:version => 20121016133904) do
   end
 
   add_index "microposts", ["user_id", "created_at"], :name => "index_microposts_on_user_id_and_created_at"
+
+  create_table "priorities", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "account_id"
+    t.integer  "rank"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "relationships", :force => true do |t|
     t.integer  "follower_id"

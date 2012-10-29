@@ -1,7 +1,12 @@
 <% provide(:title, 'Account Setup') %>
-<h1>Account Setup</h1>
+<h1>Set Targets</h1>
 
 <%= will_paginate %>
+<% if @checkAcct %>
+<ul class="account">
+  <%= render @checkAcct %>
+</ul>
+<% end %>
 
 <ul class="microposts">
   <%= render @accounts %>
@@ -13,6 +18,16 @@
 
 <script text="text/javascript">
 $(document).ready(function(){
-  $('.togglebtn').button('toggle');
+});
+
+$('.accountbtn').click(function(){
+  if ($(this).attr('class')=='btn btn-success accountbtn active') {
+    $(this).attr('class', 'btn accountbtn');
+    $(this).button('toggle');
+  } else if($(this).attr('class')=='btn accountbtn') {
+    $(this).attr('class', 'btn active btn-success accountbtn');
+    $(this).button('toggle');
+  }
+  
 });
 </script>

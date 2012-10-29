@@ -6,14 +6,11 @@ class StaticPagesController < ApplicationController
       #@sum_transactions = @transactions.sum(:value).to_f
       @accounts=@user.accounts
       if @user.accounts.where(:name=>"Cash")
-        #@debt_acct = @accounts.where(:name=>'Targeted Debt').first
-        #@debtInitialBalance = @accounts.where(:name=>'Targeted Debt').last.balance
         @check_acct = @accounts.where(:name=>'Cash').first
-        @shared_users = Account.where(:id=>@check_acct.id).first.users
         @check_date = @check_acct.created_at.to_date
-        @flows = Flow.includes(:transactions)
+        @flows = Flow.all
         @transaction = Transaction.new
-        @transactions = @user.transactions
+        @transactions = @user.transactions.where("transaction_date<=?", Date.today)
         if params[:date]
           @day=Date.parse(params[:date])
         elsif @transactions.any?
@@ -26,15 +23,24 @@ class StaticPagesController < ApplicationController
         end
         @flow_sum=Hash.new
         @flows.each do |flow|
-          @flow_sum[flow.id]=0
-          @shared_users.each do |user|
-            @flow_sum[flow.id] += user.transactions.where("transaction_date >= ? AND transaction_date <= ? AND flow_id=?", @check_date, Date.current, flow.id).sum(:value)
-          end
+          @flow_sum[flow.id] = @check_acct.transactions.where("transaction_date >= ? AND transaction_date <= ? AND flow_id=?", @check_date, Date.current, flow.id).sum(:value)
         end
+        @adjustment_sum=@check_acct.adjustments.sum(:value)*month_difference(Date.today, @check_date)
         @check_acct.balance += @flow_sum[54]
         @flow_sum.delete(54)
-        @spending_sum = @flow_sum.values.inject{|sum, x| sum+x}
+        @spending_sum = @flow_sum.values.inject{|sum, x| sum+x}-@adjustment_sum
         @cash = (@check_acct.balance-@spending_sum).round
+        if @cash <0
+          @total=@spending_sum
+        else
+          @total=@check_acct.balance
+        end
+        if cashTransaction=@transactions.where('flow_id=? AND transaction_date=?', 54, @day).first
+          @cashValue=cashTransaction.value.round
+        else
+          @cashValue=0
+        end
+        @cash_bar="bar-success"
         #@feed_items = current_user.feed.paginate(page: params[:page])
       end
     end
@@ -43,5 +49,13 @@ class StaticPagesController < ApplicationController
   def help
    
   end
- 
+
+  def month_difference(a, b)
+    difference = 12 * (b.year - a.year).abs + (b.month - a.month).abs
+    if b.day==1 
+      difference+=1
+    end
+    return difference
+  end
+  
 end

@@ -13,11 +13,71 @@
   </aside>
   <div class="span8">
     <% if @transactions.any? %>
-      <h3>Transactions (<%= @transactions.count %>)</h3>
+      <h3><%=@flow.name%> (<%= @transactions.count %>): $<%=@sum_transactions.round(0)%></h3>
+      <div id="highChartContainer" style="min-width:400px; height:400px; margin: 0 auto"></div>
       <ol class="microposts">
-        <%= render @transactions %>
+        <% @transactionMonth.sort.each do |month, transactions| %>
+          <% if transactions.any? %>
+            <h2><%= month %></h2>
+            <%= render (transactions) || 'No transactions this month.' %>
+          <% end %>
+        <% end %>
       </ol>
-      <%= will_paginate @transactions %>
     <% end %>
   </div>
 </div>
+
+<script type='text/javascript'>
+  $(document).ready(function(){
+    drawChart();
+  });
+  
+function drawChart()
+{
+  chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'highChartContainer',
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: null
+        },
+        yAxis:{
+          min: 0,
+          title: {
+            text: null
+            }
+        },
+        xAxis:{
+          type: 'datetime',
+          dateTimeLabelFormats:{
+            day: '%b. %e'
+          }
+        },
+        credits:{
+          enabled:false
+          },
+        series: [{
+            name: 'Spending',
+            data:
+              <%=
+                  @transactions.select{|transaction| transaction.value > 0}.map do |transaction|
+                    [@transactionUTC[transaction.id], (transaction.value).round(0)]
+                  end.to_json.html_safe
+              %>
+        },
+        {
+          name: 'Total Spending',
+          data:
+            <%=
+                transaction_sum=0
+                @transactions.select{|transaction| transaction.value > 0}.map do |transaction|
+                  [@transactionUTC[transaction.id], transaction_sum+=(transaction.value).round(0)]
+                end.to_json.html_safe
+            %>
+        }]
+    });
+};
+</script>

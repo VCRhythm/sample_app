@@ -1,17 +1,32 @@
 <% if signed_in? %>
   <div class="row">
-    <div class="span12">
-      <%= render 'shared/question_form_header' %>
-    </div>
+    <aside class="span4">
+      <section>
+        <%= render 'shared/user_info' %>
+        <h1>Messages</h1>
+      </section>
+      <section>
+        <%= render 'shared/stats' %>
+      </section>
+    </aside>
+    <span class="span8" style="vertical-align:bottom;">
+      <section>
+        <%= render 'question_form_header' %>
+      </section>
+      <section> 
+        <%= render 'shared/micropost_form' %>
+      </section>
+    </span>
   </div>
   <div class="row">
     <div class="span12">
-      <%= render 'shared/question_form' %>
+      <%= render 'shared/cash' %>
+      <%= render 'question_form' %>
     </div>
   </div>  
 <% else %>
   <div class="center hero-unit">
-    <h1>Money Maker</h1>
+    <h1><%=full_title(yield(:title))%></h1>
     <h2>Sign up to request an account.</h2>
     <%= link_to "Sign up now!", signup_path, 
         class: "btn btn-large btn-primary" %>
@@ -19,15 +34,6 @@
 <% end %> 
 
 <script type="text/javascript">
-
-function toUSD(number) {
-    var number = number.toString(), 
-    dollars = number.split('.')[0],
-    dollars = dollars.split('').reverse().join('')
-        .replace(/(\d{3}(?!$))/g, '$1,')
-        .split('').reverse().join('');
-    return '$' + dollars;
-}
 
 $(document).ready(function(){
   $('.bar').popover({placement:'top', trigger:'hover'});
@@ -51,10 +57,11 @@ $('#incomeVal').click(function(){
 });
 
 $('#saveIncome').click(function(){
-  var balance=Number($('#incomeVal').html().replace(/[^0-9\.]+/g,""))-$('#incomeVal').attr('cash')+parseInt($('#incomeBoost').attr('placeholder')),
-      date=$('#date_tag').attr('date');
-  var cashFlow={
-    flow_id: 54, //hardcoded in
+  var cash = $('#incomeVal').attr('value'),
+      balance = cash + parseInt($('#incomeBoost').attr('placeholder')) - $('#incomeVal').attr('cash'),
+      date = $('#date_tag').attr('date');
+  var cashFlow = {
+    flow_id: 54, //hardcoded in for cash
     value: balance,
     transaction_date: date
     }
@@ -64,7 +71,7 @@ $('#saveIncome').click(function(){
           data: {transaction:cashFlow} 
   }).success( function() {  
     $('#incomeBoostSpan').hide();
-    $('#incomeVal').attr('cash', balance);
+    $('#incomeVal').attr('cash', cash);
   });
 });
 
@@ -74,32 +81,34 @@ $('#cancelIncome').click(function(){
   $('#cancelIncome').hide();
   $('#saveIncome').hide();
   $('#slider').slider("option", "value", 100);
-  $('#incomeVal').html(toUSD($('#incomeVal').attr('cash')));
+  $('#incomeVal').html($('#incomeVal').attr('cash'));
   addIncome(100);
 });
 
 function addIncome(value){
   var placeHolder = parseInt($('#incomeBoost').attr('placeholder')),
-      addIncome = parseInt($('#incomeBoost').val()) || placeHolder || 0,
-      incomeBoost = addIncome*(value*.01)-placeHolder,
-      total=parseInt($('#incomeBar').attr('max-value'))+incomeBoost,
-      newIncome=parseInt($('#incomeVal').attr('cash'))+incomeBoost,
-      newWidth=(newIncome/total)*100+'%',
-      expenseWidth=0,
-      debtInitialBalance=parseInt($('#debtBar').attr('total')),
-      debtVal=parseInt($('#debtBalance').attr('balance'))-(addIncome-incomeBoost),
-      debtWidth=(debtVal/debtInitialBalance)*100+'%';
+      cash = parseInt($('#incomeVal').attr('cash')),
+      addIncome = $('#incomeBoost').val() || placeHolder || 0;
+  var incomeBoost = addIncome * (value * .01) - placeHolder,
+      newIncome = cash + incomeBoost;
+      //debtInitialBalance=parseInt($('#debtBar').attr('total')),
+      //debtVal=parseInt($('#debtBalance').attr('balance'))-(addIncome-incomeBoost),
+      //debtWidth=(debtVal/debtInitialBalance)*100+'%';
+  if (newIncome <= 0) total = parseInt($('#incomeBar').attr('expense-value'));
+  else if (cash < 0) total = parseInt($('#incomeBar').attr('max-value'))+newIncome;
+  else total = parseInt($('#incomeBar').attr('max-value'))+incomeBoost;
+  var newWidth=((newIncome/total)*100)+'%';
   $(".expense").each(function(index, object){
-   expenseWidth = (Number($(this).attr('data-content').replace(/[^0-9\.]+/g,""))/total)*100+'%';
-    $(this).width(expenseWidth);
+    $(this).width((Number($(this).attr('data-content').replace(/[^0-9\.]+/g,""))/total)*100+'%');
   });
-  $('#incomeVal').attr('data-content', toUSD(incomeBoost+placeHolder));
-  $('#debtBar').width(debtWidth);
-  $('#debtBalance').html(toUSD(debtVal));
+  $('#incomeVal').attr('data-content', incomeBoost+placeHolder);
   $('#incomeBar').width(newWidth);
-  $('#incomeVal').html(toUSD(newIncome));
+  $('#incomeVal').html(newIncome);
+  $('#incomeVal').attr('value', newIncome);
   $('#saveIncome').show();
   $('#cancelIncome').show();
+  //$('#debtBar').width(debtWidth);
+  //$('#debtBalance').html(debtVal);
 }
 
 /* $('.flowHeader').hover(function(){
@@ -130,7 +139,7 @@ $('.flow-input').change(function () {
     oldValue=$('#input_'+id).attr('placeholder');
     $('#input_'+id).attr('placeholder', value);
     newIncome=parseInt($('#incomeVal').attr('cash'))-(value - oldValue);
-    $('#incomeVal').html(toUSD(newIncome));
+    $('#incomeVal').html(newIncome);
     $('#incomeVal').attr('cash', newIncome);
   });
 });

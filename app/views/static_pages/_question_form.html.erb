@@ -1,0 +1,5 @@
+<% if @flows.any? %>
+  <ol class="microposts">
+    <%= render partial: 'shared/flow_question', collection: @flows %>
+  </ol>
+<% end %>

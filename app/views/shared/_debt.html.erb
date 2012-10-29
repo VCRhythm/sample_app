@@ -1,0 +1,6 @@
+<% debt_percent=(Float(debt.balance)/debt.initial_balance)*100 %>
+<h3><%= debt.name %>: <span id="debtBalance" balance="<%= debt.balance %>"><%= number_to_currency(debt.balance, options={:precision=>0}) %></span></h3>
+<% colour="%06x" % (rand * 0xffffff) %>
+<div class="progress">
+  <div class="bar" id="debtBar" style="width: <%= debt_percent %>%; background-color: #<%=colour%>; background-image:none;" total="<%= debt.initial_balance %>" ></div>
+</div>

@@ -2,7 +2,13 @@
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
     <%= f.text_field :name, placeholder: "Name of new debt" %>:  
-    $<%= f.text_field :balance, placeholder: "Balance" %>.00
+    <span class="input-prepend input-append">
+      <span class="add-on">$</span><%= f.text_field :balance, placeholder: "Balance", class: 'input-medium' %>
+      <span class="add-on">.00</span>
+    </span>
+    <span class="input-prepend" style="margin-left:20px;">
+      <span class="add-on">%</span><%= f.text_field :rate, placeholder: "Rate", class: 'input-medium' %>
+    </span>
+    <%= f.submit "Add", class: "btn btn-medium btn-primary" %>
   </div>
-  <%= f.submit "Add", class: "btn btn-large btn-primary" %>
 <% end %>
